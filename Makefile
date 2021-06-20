@@ -6,11 +6,17 @@
 
 pwd=$$(PWD)
 
-download:
-	wget http://localhost:8080/swagger/v1/swagger.json
-
 run-definition:
 	docker run -d -v $(pwd)/swagger.json:/usr/local/apache2/htdocs/swagger.json --name swagger-definition -p 8880:80 httpd
+
+download-definition:
+	wget http://localhost:8080/swagger/v1/swagger.json
+
+download-slate:
+	git clone git@github.com:slatedocs/slate.git
+
+update-logo:
+	cp logo.png slate/source/images/logo.png
 
 # Allows theming and vendor extensions (e.g. x-logo)
 # https://github.com/Redocly/redoc
@@ -27,4 +33,3 @@ build-slate: build-widdershins
 
 run-slate:
 	docker run -d -v $$(PWD)/slate-generated:/usr/local/apache2/htdocs/ --name slate -p 8882:80 httpd
-
