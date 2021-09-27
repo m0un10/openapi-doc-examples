@@ -9,7 +9,7 @@ pwd=$$(PWD)
 run-definition:
 	docker run -d -v $(pwd)/swagger.json:/usr/local/apache2/htdocs/swagger.json --name swagger-definition -p 8880:80 httpd
 
-download-definition:
+download:
 	wget http://localhost:8080/swagger/v1/swagger.json
 
 download-slate:
@@ -27,9 +27,10 @@ build-widdershins:
 	widdershins --search false --language_tabs 'java:Java' 'csharp:.NET' --summary swagger.json -o output.md
 	cp output.md slate/source/index.html.md
 
-build-slate: build-widdershins
+build: build-widdershins
 	mkdir -p slate-generated 
 	docker run --rm -v $$(PWD)/slate-generated:/srv/slate/build -v $$(PWD)/slate/source:/srv/slate/source slatedocs/slate
 
-run-slate:
+run:
 	docker run -d -v $$(PWD)/slate-generated:/usr/local/apache2/htdocs/ --name slate -p 8882:80 httpd
+	open http://localhost:8882
